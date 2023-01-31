@@ -1,0 +1,1 @@
+# go to http://gollnickdata.com//2019/01/09/univariate-regression/
