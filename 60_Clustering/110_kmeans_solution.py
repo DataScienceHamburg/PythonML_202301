@@ -13,6 +13,7 @@ from plotnine import *
 # Data Preparation
 #%% 2. Choose the same data as in the dbscan Lab-lecture and prepare the dataframe "df"
 num_points = 4000
+random.seed(123)
 x = random.sample(population=set(np.linspace(start=-10, stop=10, num=num_points)), k=num_points)
 y = random.sample(population=set(np.linspace(start=-10, stop=10, num=num_points)), k=num_points)
 z = [(x**2 + y**2) for x, y in zip(x, y)]
@@ -35,7 +36,7 @@ df = df.drop(['z', 'class'], axis=1)  # delete not required columns
 
 # # Modeling
 #%% 4. Perform the clustering based on Kmeans algorithm.
-clustering = KMeans(n_clusters=2).fit(df)
+clustering = KMeans(n_clusters=3, random_state=123).fit(df)
 
 df['labels'] = clustering.labels_
 df['labels'] = df['labels'].astype("category")
@@ -46,5 +47,5 @@ df['labels'] = df['labels'].astype("category")
   geom_point()
 )
 
-
+#%%
 # The two different classes are distinguished not very well.
