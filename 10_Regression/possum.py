@@ -54,3 +54,6 @@ importances = RandomForestClassifier(n_estimators=300, random_state=42, bootstra
 feature_importances = pd.DataFrame({"features":list(X_train.columns),"importances": importances}).sort_values(by=["importances"], ascending=False)
 sns.barplot(data=feature_importances, x ="features", y="importances")
 # %%
+from scikitplot.metrics import plot_roc_curve
+# %%
+plot_roc_curve()
