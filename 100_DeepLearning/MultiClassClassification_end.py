@@ -56,6 +56,10 @@ class MultiClassNet(nn.Module):
         x = self.log_softmax(x)
         return x
 
+# model = MultiClassNet(NUM_FEATURES=4, NUM_CLASSES=3, HIDDEN_FEATURES=10)   
+# input_sample = torch.rand((4, 4))
+# model(input_sample).shape
+
 # %% hyper parameters
 NUM_FEATURES = iris_data.X.shape[1]
 HIDDEN = 6
@@ -93,6 +97,7 @@ for epoch in range(NUM_EPOCHS):
 # %% show losses over epochs
 
 sns.lineplot(x= range(len(losses)), y = losses)
+plt.show()
 # %% test the model
 X_test_torch = torch.from_numpy(X_test)
 with torch.no_grad():
