@@ -8,6 +8,8 @@ from torch.utils.data import Dataset, DataLoader
 from plotnine import ggplot, aes, geom_point
 import seaborn as sns
 import matplotlib.pyplot as plt
+from skorch import NeuralNetRegressor
+from sklearn.model_selection import GridSearchCV
 # %%
 file_path = 'data/Turbine_Data.csv'
 df = pd.read_csv(file_path, sep=",")
@@ -67,7 +69,7 @@ model = PowerCurveNet(NUM_INPUT_FEATURES=X_train.shape[1], NUM_HIDDEN_FEATURES=1
 loss_fn = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters())
 # %% Training Loop
-NUM_EPOCHS = 30
+NUM_EPOCHS = 20
 losses = []
 
 for e in range(NUM_EPOCHS):
@@ -116,4 +118,24 @@ plt.show()
 # %%
 sns.scatterplot(x=X_tests_ws, y=y_tests, s=10)
 plt.show()
+# %%
+net = NeuralNetRegressor(PowerCurveNet(NUM_INPUT_FEATURES=X_train.shape[1], NUM_HIDDEN_FEATURES=100), max_epochs=10, lr = 0.01)
+net.set_params(train_split=False, verbose=0)
+
+params = {
+    #'lr': [0.001],
+    'max_epochs': [10, 50]
+}
+
+gs = GridSearchCV(net, params, refit=False, cv=2, scoring='r2', verbose=2)
+
+X_torch = torch.tensor(np.array(X), dtype=torch.float32)
+y_torch = torch.tensor(np.array(y).reshape(-1, 1), dtype=torch.float32)
+gs.fit(X_torch, y_torch)
+
+#%%
+gs.best_score_
+
+# %%
+gs.best_params_
 # %%
